@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أولمبياد الكيمياء — قوانين الغازات</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --surface: #ffffff;
+    --surface2: #f0f2f5;
+    --border: #d0d7de;
+    --border2: #b0b8c1;
+    --text: #1a1f2e;
+    --text2: #57606a;
+    --text3: #8c959f;
+    --blue: #0969da;
+    --blue-bg: #ddf4ff;
+    --green: #1a7f37;
+    --green-bg: #dafbe1;
+    --red: #cf222e;
+    --red-bg: #fff0f0;
+    --amber: #9a6700;
+    --amber-bg: #fff8c5;
+    --purple: #6639ba;
+    --purple-bg: #fbefff;
+    --teal: #1b7c83;
+    --accent: #0969da;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.25rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background: rgba(246,248,250,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #0550ae, #0d6e56);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .progress-bar {
+    width: 160px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0550ae, #0969da);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ── LAYOUT ── */
+  .main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* ── QUESTION CARD ── */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    animation: slideIn 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: var(--surface2);
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+  }
+  .badge-num   { background: var(--blue-bg);   color: var(--blue);   border: 1px solid #1f6feb44; }
+  .badge-level { background: var(--amber-bg);  color: var(--amber);  border: 1px solid #d2992244; }
+  .badge-topic { background: var(--purple-bg); color: var(--purple); border: 1px solid #a371f744; }
+
+  .q-body { padding: 1.5rem; }
+
+  .context-block {
+    background: var(--surface2);
+    border-right: 3px solid var(--blue);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.25rem;
+    font-size: 13.5px;
+    color: var(--text2);
+    white-space: pre-line;
+    line-height: 1.8;
+  }
+
+  .graph-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .graph-wrap svg {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .q-text {
+    font-size: 15.5px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .opt {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text);
+    text-align: right;
+    line-height: 1.65;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    width: 100%;
+  }
+  .opt:hover:not(:disabled) {
+    border-color: var(--blue);
+    background: var(--blue-bg);
+    transform: translateX(-2px);
+  }
+  .opt:disabled { cursor: default; }
+  .opt.correct {
+    border-color: var(--green);
+    background: var(--green-bg);
+    color: #aff5b4;
+  }
+  .opt.wrong {
+    border-color: var(--red);
+    background: var(--red-bg);
+    color: #ffa198;
+  }
+  .opt-lbl {
+    font-weight: 700;
+    font-size: 12px;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #f0f2f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-family: var(--mono);
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+  .opt.correct .opt-lbl { background: #dafbe1; color: #1a7f37; border-color: #1a7f37; }
+  .opt.wrong   .opt-lbl { background: #fff0f0; color: #cf222e; border-color: #cf222e; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    margin-top: 1.25rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: var(--radius);
+    font-size: 13.5px;
+    line-height: 1.8;
+    animation: fadeIn 0.3s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  .feedback.ok  { background: var(--green-bg); border: 1px solid #2ea04388; color: #aff5b4; }
+  .feedback.err { background: var(--red-bg);   border: 1px solid #f8514988; color: #ffa198; }
+  .fb-title { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .fb-formula {
+    font-family: var(--mono);
+    background: rgba(0,0,0,0.3);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 12px;
+  }
+
+  /* ── NEXT BTN ── */
+  .btn-next {
+    margin-top: 1.25rem;
+    padding: 0.65rem 1.6rem;
+    background: #0969da;
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: none;
+  }
+  .btn-next:hover  { background: #0550ae; }
+  .btn-next:active { transform: scale(0.97); }
+
+  /* ── SCORE CARD ── */
+  .score-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 3rem 2rem;
+    text-align: center;
+    animation: slideIn 0.4s ease;
+  }
+  .score-ring {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(#0969da var(--pct), #d0d7de 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    position: relative;
+  }
+  .score-ring::after {
+    content: '';
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--surface);
+    position: absolute;
+  }
+  .score-num {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0969da;
+    position: relative;
+    z-index: 1;
+    font-family: var(--mono);
+  }
+  .score-msg {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+  .score-sub {
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 2rem;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 2rem;
+  }
+  .stat-cell {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 0.5rem;
+  }
+  .stat-n   { font-size: 26px; font-weight: 700; font-family: var(--mono); }
+  .stat-lbl { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .stat-n.g { color: #1a7f37; }
+  .stat-n.r { color: #cf222e; }
+  .stat-n.b { color: #0969da; }
+
+  .review-list { text-align: right; margin-bottom: 2rem; }
+  .review-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .review-item:last-child { border-bottom: none; }
+  .ri-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .ri-dot.ok  { background: var(--green); }
+  .ri-dot.err { background: var(--red); }
+  .ri-q { flex: 1; color: var(--text2); }
+  .ri-badge { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+  .ri-badge.ok  { background: var(--green-bg); color: var(--green); }
+  .ri-badge.err { background: var(--red-bg);   color: var(--red); }
+
+  .btn-restart {
+    padding: 0.75rem 2.5rem;
+    border: 1px solid #0969da;
+    border-radius: var(--radius);
+    background: transparent;
+    color: #0969da;
+    font-size: 14px;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-restart:hover { background: #ddf4ff; }
+
+  /* ── DECORATIVE BG GRID ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(#d0d7de 1px, transparent 1px),
+      linear-gradient(90deg, #d0d7de 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .main { position: relative; z-index: 1; }
+  .site-header { position: sticky; z-index: 100; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .main { padding: 1.5rem 1rem 3rem; }
+    .q-body { padding: 1.1rem; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .score-wrap { padding: 2rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-icon">⚗</div>
+    <span>أولمبياد الكيمياء الوطني</span>
+  </div>
+  <div class="progress-wrap">
+    <span id="prog-label">0 / 10</span>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MAIN ══ -->
+<main class="main" id="app"></main>
+
+<script>
+/* ═══════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════ */
+const Q = [
+{
+  level:"تحليل عميق", topic:"قانون بويل",
+  context:"في مختبر كيمياء، قام الطالب أحمد بتجربة على غاز محصور في أسطوانة بمكبس. رسم العلاقة بين P وV وحصل على منحنى قطع زائد. ثم أعاد الرسم بين V و(1/P) فحصل على خط مستقيم ميله يساوي k.",
+  graph: `
+  <svg viewBox="0 0 260 190" width="240" height="180">
+    <rect width="260" height="190" fill="none"/>
+    <g transform="translate(38,12)">
+      <line x1="0" y1="150" x2="210" y2="150" stroke="#d0d7de" stroke-width="1.5"/>
+      <line x1="0" y1="0" x2="0" y2="150" stroke="#d0d7de" stroke-width="1.5"/>
+      <text x="105" y="168" font-size="11" fill="#57606a" text-anchor="middle" font-family="Tajawal,sans-serif">V (L)</text>
+      <text x="-26" y="78" font-size="11" fill="#57606a" transform="rotate(-90,-26,78)" font-family="Tajawal,sans-serif">P (atm)</text>
+      <text x="50" y="14" font-size="10" fill="#0969da" font-weight="700" font-family="Tajawal,sans-serif">P مقابل V</text>
+      <path d="M 8,145 Q 35,65 75,38 Q 120,18 190,12" fill="none" stroke="#58a6ff" stroke-width="2.5"/>
+    </g>
+  </svg>
+  <svg viewBox="0 0 260 190" width="240" height="180">
+    <rect width="260" height="190" fill="none"/>
+    <g transform="translate(38,12)">
+      <line x1="0" y1="150" x2="210" y2="150" stroke="#d0d7de" stroke-width="1.5"/>
+      <line x1="0" y1="0" x2="0" y2="150" stroke="#d0d7de" stroke-width="1.5"/>
+      <text x="105" y="168" font-size="11" fill="#57606a" text-anchor="middle" font-family="Tajawal,sans-serif">1/P</text>
+      <text x="-26" y="78" font-size="11" fill="#57606a" transform="rotate(-90,-26,78)" font-family="Tajawal,sans-serif">V (L)</text>
+      <text x="50" y="14" font-size="10" fill="#1a7f37" font-weight="700" font-family="Tajawal,sans-serif">V مقابل 1/P</text>
+      <line x1="4" y1="148" x2="195" y2="10" stroke="#3fb950" stroke-width="2.5"/>
+      <circle cx="4"   cy="148" r="4" fill="#1a7f37"/>
+      <circle cx="100" cy="79"  r="4" fill="#1a7f37"/>
+      <circle cx="195" cy="10"  r="4" fill="#1a7f37"/>
+      <text x="6" y="144" font-size="9" fill="#1a7f37" font-family="Tajawal,sans-serif">الأصل</text>
+      <text x="98" y="95" font-size="8" fill="#57606a" font-family="Tajawal,sans-serif">ميل = k</text>
+    </g>
+  </svg>`,
+  q:"استنتج أحمد أن الثابت k يمثل ضرب P×V. إذا كانت درجة الحرارة 300K وعدد مولات الغاز 0.5 mol، فما القيمة الدقيقة لـ k بوحدة (L·atm)؟",
+  opts:[
+    "12.3 L·atm فقط بدون تفسير",
+    "0.5 L·atm لأن n=0.5",
+    "k = nRT = (0.5)(0.0821)(300) ≈ 12.3 L·atm",
+    "k تعتمد فقط على درجة الحرارة وليس على عدد المولات"
+  ],
+  ans:2,
+  fb_ok:"ممتاز! k في قانون بويل يساوي nRT بالضبط، لأن PV=nRT وعند ثبوت n وT يصبح PV=ثابت=nRT. الحساب: k=(0.5)(0.0821)(300)=12.315 ≈ 12.3 L·atm.",
+  fb_err:"الإجابة (ج). قانون بويل: PV=k، وبربطه بقانون الغاز المثالي PV=nRT نجد k=nRT. الحساب: k=(0.5)(0.0821)(300)≈12.3 L·atm. الخطأ الشائع: ظن أن k لا يعتمد على عدد المولات."
+},
+{
+  level:"استنباط", topic:"قانون شارل",
+  context:"في تجربة قانون شارل، سجّلت الطالبة سارة البيانات التالية لغاز محصور عند ضغط ثابت 1 atm:\n• عند 150K حجمه 300 mL\n• عند 300K حجمه 600 mL\nثم لاحظت أن امتداد الخط المستقيم يقطع محور درجات الحرارة عند نقطة معينة.",
+  graph:`
+  <svg viewBox="0 0 320 210" width="300" height="200">
+    <rect width="320" height="210" fill="none"/>
+    <g transform="translate(50,12)">
+      <line x1="0"  y1="165" x2="255" y2="165" stroke="#d0d7de" stroke-width="1.5"/>
+      <line x1="60" y1="0"   x2="60"  y2="165" stroke="#d0d7de" stroke-width="1.5"/>
+      <line x1="0"  y1="165" x2="60"  y2="165" stroke="#d0d7de" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="128" y="182" font-size="11" fill="#57606a" text-anchor="middle" font-family="Tajawal,sans-serif">درجة الحرارة (K)</text>
+      <text x="-38" y="90" font-size="11" fill="#57606a" transform="rotate(-90,-38,90)" font-family="Tajawal,sans-serif">V (mL)</text>
+      <text x="22" y="162" font-size="9" fill="#cf222e" font-family="Tajawal,sans-serif">0K</text>
+      <text x="82" y="162" font-size="9" fill="#57606a" font-family="Tajawal,sans-serif">150</text>
+      <text x="152" y="162" font-size="9" fill="#57606a" font-family="Tajawal,sans-serif">300</text>
+      <text x="220" y="162" font-size="9" fill="#57606a" font-family="Tajawal,sans-serif">450</text>
+      <line x1="0" y1="165" x2="245" y2="0" stroke="#58a6ff" stroke-width="1.5" stroke-dasharray="6,4"/>
+      <line x1="90" y1="110" x2="150" y2="55" stroke="#58a6ff" stroke-width="3"/>
+      <circle cx="90"  cy="110" r="5" fill="#58a6ff"/>
+      <circle cx="150" cy="55"  r="5" fill="#58a6ff"/>
+      <text x="93"  y="105" font-size="9" fill="#0550ae" font-family="Tajawal,sans-serif">(150K, 300mL)</text>
+      <text x="153" cy="50"  x="153" y="50" font-size="9" fill="#0550ae" font-family="Tajawal,sans-serif">(300K, 600mL)</text>
+      <circle cx="0" cy="165" r="4" fill="#cf222e" stroke="#cf222e"/>
+      <text x="3" y="155" font-size="8" fill="#cf222e" font-family="Tajawal,sans-serif">V=0 هنا</text>
+    </g>
+  </svg>`,
+  q:"عند أي درجة حرارة يتقاطع امتداد الخط المستقيم مع محور درجات الحرارة (عند V=0)؟ وما الدلالة الفيزيائية لهذه النقطة؟",
+  opts:[
+    "عند 0°C — نقطة تجمد الماء ولا دلالة للغاز",
+    "عند 0K (−273.15°C) — الصفر المطلق حيث تتوقف الحركة الحرارية نظريًا",
+    "عند −100K — نقطة تكثف الغاز",
+    "الخط لا يقطع محور درجات الحرارة أبدًا"
+  ],
+  ans:1,
+  fb_ok:"صحيح تمامًا! امتداد الخط يصل إلى V=0 عند T=0K (−273.15°C)، وهو الصفر المطلق. الدلالة الفيزيائية: تتوقف الحركة الحرارية للجزيئات نظريًا. لكن في الواقع تتحول الغازات إلى سائل/صلب قبل بلوغ هذه النقطة — لهذا نستخدم الكلفن وليس السيلزيوس.",
+  fb_err:"الإجابة (ب). من V/T=ثابت، عند V=0 يكون T=0K. التحقق: 300/150 = 0/T₀ → T₀=0K. هذا هو الصفر المطلق −273.15°C، وهو سبب إلزامية استخدام كلفن في قوانين الغازات."
+},
+{
+  level:"تحليل + حساب", topic:"قانون جاي-لوساك",
+  context:"اكتشف فريق هندسي في شركة إطارات أن إطار السيارة ينفجر عندما يتجاوز الضغط الداخلي 4.5 atm. عند 20°C يُضخ الهواء للإطار بضغط 2.2 atm. قادت السيارة مسافة طويلة فارتفعت حرارة الإطار إلى 95°C.",
+  graph:null,
+  q:"هل ينفجر الإطار؟ استخدم قانون جاي-لوساك مفترضًا أن حجم الإطار ثابت. (يجب تحويل الدرجات إلى كلفن)",
+  opts:[
+    "نعم ينفجر، الضغط الجديد ≈ 2.75 atm > 4.5 atm",
+    "لا ينفجر، الضغط الجديد ≈ 2.76 atm < 4.5 atm",
+    "نعم ينفجر لأن الحرارة ارتفعت بنسبة 75%",
+    "لا يمكن الحساب دون معرفة حجم الإطار"
+  ],
+  ans:1,
+  fb_ok:"إجابة صحيحة! T₁=293K، T₂=368K، P₁=2.2 atm. بتطبيق P₁/T₁=P₂/T₂: P₂=2.2×(368/293)=2.2×1.256≈2.76 atm. هذا أقل بكثير من 4.5 atm ← الإطار آمن. الخطأ الشائع: الضرب في نسبة الدرجة السيلزيوس بدلًا من الكلفن.",
+  fb_err:"الإجابة (ب). يجب تحويل الدرجات: T₁=20+273=293K، T₂=95+273=368K. P₂=P₁×(T₂/T₁)=2.2×(368/293)≈2.76 atm. هذا أقل من 4.5 atm فلن ينفجر. حجم الإطار ثابت فلا يؤثر."
+},
+{
+  level:"استنباط متقدم", topic:"القانون العام للغازات",
+  context:"حصلت مختبرات بحثية على بيانات لعينة غاز في حالتين:\n• الحالة الأولى: P₁=3 atm، V₁=8L، T₁=300K\n• الحالة الثانية: V₂=4L، T₂=200K\n(المطلوب إيجاد P₂)",
+  graph:null,
+  q:"أي قانون من القوانين الفردية (بويل/شارل/جاي-لوساك) يمكن استخدامه مباشرةً لحل هذه المسألة، ولماذا؟ وما قيمة P₂؟",
+  opts:[
+    "قانون بويل فقط لأن درجة الحرارة لم تتغير كثيرًا؛ P₂=6 atm",
+    "لا يمكن تطبيق أي من القوانين الفردية لأن الثلاثة متغيرات تغيرت؛ القانون العام يعطي P₂=4 atm",
+    "قانون شارل لأن الضغط لم يُذكر في الحالة الثانية؛ P₂=6 atm",
+    "لا حل لأن n غير معلومة"
+  ],
+  ans:1,
+  fb_ok:"تحليل ممتاز! تغيرت P وV وT معًا → لا يمكن تطبيق القوانين الفردية. القانون العام: P₁V₁/T₁=P₂V₂/T₂ → P₂=(3×8×200)/(300×4)=4800/1200=4 atm. n لا تُحتاج لأنها ثابتة وتُلغى.",
+  fb_err:"الإجابة (ب). P وV وT كلها تغيرت → القانون العام إلزامي. P₂=(P₁×V₁×T₂)/(T₁×V₂)=(3×8×200)/(300×4)=4 atm."
+},
+{
+  level:"تحليل بياني", topic:"قانون أفوجادرو",
+  context:"الرسم البياني أدناه يُظهر العلاقة بين حجم الغاز وعدد المولات عند T=273K وP=1 atm (ظروف STP):",
+  graph:`
+  <svg viewBox="0 0 300 210" width="280" height="200">
+    <rect width="300" height="210" fill="none"/>
+    <g transform="translate(45,12)">
+      <line x1="0" y1="165" x2="240" y2="165" stroke="#d0d7de" stroke-width="1.5"/>
+      <line x1="0" y1="0"   x2="0"   y2="165" stroke="#d0d7de" stroke-width="1.5"/>
+      <text x="120" y="182" font-size="11" fill="#57606a" text-anchor="middle" font-family="Tajawal,sans-serif">عدد المولات n</text>
+      <text x="-38" y="90" font-size="11" fill="#57606a" transform="rotate(-90,-38,90)" font-family="Tajawal,sans-serif">V (L)</text>
+      <line x1="0" y1="165" x2="220" y2="5" stroke="#6639ba" stroke-width="2.5"/>
+      <circle cx="55"  cy="123" r="5" fill="#6639ba"/>
+      <circle cx="110" cy="81"  r="5" fill="#6639ba"/>
+      <circle cx="165" cy="39"  r="5" fill="#6639ba"/>
+      <text x="58"  y="118" font-size="8.5" fill="#6639ba" font-family="Tajawal,sans-serif">(0.5, 11.2L)</text>
+      <text x="113" y="76"  font-size="8.5" fill="#6639ba" font-family="Tajawal,sans-serif">(1.0, 22.4L)</text>
+      <text x="168" y="34"  font-size="8.5" fill="#6639ba" font-family="Tajawal,sans-serif">(1.5, 33.6L)</text>
+      <text x="50"  y="14"  font-size="10"  fill="#6639ba" font-weight="700" font-family="Tajawal,sans-serif">V vs n عند STP</text>
+      <line x1="60" y1="0" x2="220" y2="0" stroke="#d0d7de" stroke-width="0.5" stroke-dasharray="2,3"/>
+      <text x="100" y="8" font-size="8" fill="#57606a" font-family="Tajawal,sans-serif">ميل = ΔV/Δn = ?</text>
+    </g>
+  </svg>`,
+  q:"ما ميل الخط؟ وماذا يمثل فيزيائيًا؟ وأي العبارات التالية تُستنتج بدقة من هذا الرسم البياني؟",
+  opts:[
+    "الميل=22.4 L/mol ويمثل الحجم المولي عند STP؛ كل مول من أي غاز مثالي يشغل 22.4L عند STP",
+    "الميل=11.2 L/mol لأن الضغط ضعف الجوي",
+    "الميل=22.4 L/mol لكنه يختلف من غاز إلى آخر",
+    "الميل=R=0.0821 L·atm/mol·K وهو ثابت الغاز العالمي"
+  ],
+  ans:0,
+  fb_ok:"دقيق جدًا! الميل=ΔV/Δn=22.4/1.0=22.4 L/mol، وهو الحجم المولي للغاز المثالي عند STP. هذا يؤكد قانون أفوجادرو: كل المولات من أي غاز مثالي تشغل نفس الحجم عند نفس الظروف. الخط يمر بالأصل ← تناسب طردي مباشر.",
+  fb_err:"الإجابة (أ). الميل=ΔV/Δn=(22.4−0)/(1.0−0)=22.4 L/mol، وهو الحجم المولي عند STP. من قانون أفوجادرو: جميع الغازات المثالية تشغل نفس الحجم لنفس عدد المولات عند نفس T وP."
+},
+{
+  level:"تطبيق + تقييم", topic:"قانون الغاز المثالي",
+  context:"في مختبر جنائي، وُجد غاز مجهول محصور في وعاء حجمه 2.5L عند 27°C وضغط 1.5 atm. كتلة الغاز المقاسة = 4.92g.\nالمطلوب: تحديد هوية الغاز باستخدام M = mRT/PV",
+  graph:null,
+  q:"احسب الكتلة المولية للغاز المجهول، ثم حدد هويته:",
+  opts:[
+    "M≈32 g/mol — الغاز هو ثاني أكسيد الكبريت SO₂ (M=64)",
+    "M≈32 g/mol — الغاز هو الأكسجين O₂ أو الأوزون O₃",
+    "M≈32 g/mol — الغاز هو الأكسجين O₂ (M=32) وهو الأرجح",
+    "M≈64 g/mol — الغاز هو ثاني أكسيد الكبريت SO₂"
+  ],
+  ans:2,
+  fb_ok:"تحليل جنائي دقيق! n=PV/RT=(1.5×2.5)/(0.0821×300)=3.75/24.63≈0.1523 mol. M=m/n=4.92/0.1523≈32.3 g/mol ≈ 32 g/mol. هذا يتطابق مع O₂ (2×16=32). الأوزون O₃ له M=48، وSO₂ له M=64 — كلاهما لا يتطابق.",
+  fb_err:"الإجابة (ج). n=PV/RT=(1.5×2.5)/(0.0821×300)≈0.152 mol. M=4.92÷0.152≈32 g/mol. الكتلة المولية 32 تتوافق مع O₂ (2×16=32). الصيغة: M=mRT/PV."
+},
+{
+  level:"استنباط متقدم", topic:"قانون دالتون",
+  context:"خزان صناعي يحتوي على خليط: نيتروجين (X=0.60) + أكسجين (X=0.25) + ثاني أكسيد الكربون. الضغط الكلي = 5 atm.",
+  graph:null,
+  q:"عالم تحليلي يريد معرفة الكسر المولي لـCO₂ وضغطه الجزئي. أي خطوة تُظهر فهمًا صحيحًا لقانون دالتون؟",
+  opts:[
+    "X(CO₂)=1−0.60−0.25=0.15 وP(CO₂)=0.15×5=0.75 atm",
+    "لا يمكن الحساب دون معرفة درجة الحرارة",
+    "X(CO₂)=0.15 لكن P(CO₂)=5÷0.15=33.3 atm",
+    "X(CO₂)=0.85 لأنه المتبقي بعد طرح النيتروجين فقط"
+  ],
+  ans:0,
+  fb_ok:"فهم صحيح! مجموع الكسور المولية=1 دائمًا. X(CO₂)=1−0.60−0.25=0.15. الضغط الجزئي: P(CO₂)=X×P_T=0.15×5=0.75 atm. العلاقة المستخدمة: Pᵢ=Xᵢ×P_T.",
+  fb_err:"الإجابة (أ). مجموع الكسور المولية=1 في أي خليط. X(CO₂)=1−0.60−0.25=0.15. والضغط الجزئي=الكسر المولي×الضغط الكلي=0.15×5=0.75 atm. لا داعي لدرجة الحرارة."
+},
+{
+  level:"تطبيق تكاملي", topic:"جمع الغازات فوق الماء",
+  context:"جمع طالب غاز النيتروجين فوق الماء:\n• الحجم الكلي: 350 mL عند 25°C\n• الضغط الجوي: 760 mmHg\n• ضغط بخار الماء عند 25°C: 23.8 mmHg",
+  graph:null,
+  q:"ما الضغط الفعلي لغاز N₂ فقط؟ وما الخطأ المنهجي إذا تجاهل الطالب ضغط بخار الماء؟",
+  opts:[
+    "P(N₂)=736.2 mmHg؛ لو تجاهله سيحسب كتلة أكبر من الحقيقية",
+    "P(N₂)=783.8 mmHg؛ لو تجاهله سيحسب كتلة أقل من الحقيقية",
+    "P(N₂)=760 mmHg لأن بخار الماء لا يؤثر",
+    "P(N₂)=736.2 mmHg؛ لو تجاهله سيحسب كتلة أقل من الحقيقية"
+  ],
+  ans:0,
+  fb_ok:"تحليل منهجي رائع! P(N₂)=P_total−P(H₂O)=760−23.8=736.2 mmHg. لو استخدم 760 بدلًا من 736.2 → ظن أن الضغط أعلى → حسب n أكبر → كتلة أكبر من الحقيقية. دائمًا: P_gas=P_total−P_water.",
+  fb_err:"الإجابة (أ). P(N₂)=760−23.8=736.2 mmHg. لو استخدم 760 ← سيحسب n أكبر من الحقيقي ← كتلة أكبر (لا أقل). دائمًا اطرح ضغط بخار الماء عند الجمع فوق الماء."
+},
+{
+  level:"استنباط كيميائي عميق", topic:"حسابات تكافؤية + قانون الغاز المثالي",
+  context:"في الأكياس الهوائية للسيارات:\n2NaN₃(s) → 2Na(s) + 3N₂(g)\nيحتاج الكيس الهوائي N₂ بحجم 35.0L عند 85°C و1.10 atm لحماية السائق. M(NaN₃)=65 g/mol.",
+  graph:null,
+  q:"ما الحد الأدنى من كتلة NaN₃ اللازمة لتوليد هذا الحجم من N₂؟",
+  opts:[
+    "حوالي 56-58 g من NaN₃",
+    "77 g من NaN₃",
+    "154 g من NaN₃",
+    "52 g من NaN₃"
+  ],
+  ans:0,
+  fb_ok:"حل احترافي! الخطوات: ① T=85+273=358K. ② n(N₂)=PV/RT=(1.10×35.0)/(0.0821×358)=38.5/29.39≈1.311 mol. ③ العلاقة التكافؤية: 3 mol N₂ من 2 mol NaN₃، إذن n(NaN₃)=1.311×(2/3)≈0.874 mol. ④ الكتلة=0.874×65≈56.8 g.",
+  fb_err:"الإجابة (أ). T=358K. n(N₂)=PV/RT=(1.10×35.0)/(0.0821×358)≈1.311 mol. من 3mol N₂ → 2mol NaN₃: n(NaN₃)=1.311×(2/3)≈0.874 mol. الكتلة=0.874×65≈56.8 g."
+},
+{
+  level:"تحليل شامل", topic:"تكامل القوانين",
+  context:"عينة نيون في الحالة الأولى: P₁=2 atm، V₁=10L، T₁=−40°C.\nمطلوب تحقيق الحالة الثانية حيث:\n• يتضاعف الضغط: P₂=2P₁=4 atm\n• ينخفض الحجم إلى الربع: V₂=V₁/4=2.5L\nالمطلوب: إيجاد T₂ بالدرجة السيلزيوس.",
+  graph:null,
+  q:"ما درجة الحرارة T₂ المطلوبة بالسيلزيوس؟",
+  opts:[
+    "116.5°C",
+    "−20°C",
+    "−156.5°C",
+    "389.5°C"
+  ],
+  ans:2,
+  fb_ok:"إجابة مثالية! T₁=−40+273=233K. بالقانون العام: T₂=T₁×(P₂V₂)/(P₁V₁)=233×(4×2.5)/(2×10)=233×(10/20)=233×0.5=116.5K. تحويل إلى سيلزيوس: 116.5−273=−156.5°C. الخطأ الشائع: نسيان التحويل الأخير إلى سيلزيوس.",
+  fb_err:"الإجابة (ج) −156.5°C. الحساب بالكلفن: T₁=233K، P₂=4atm، V₂=2.5L. T₂=T₁×(P₂V₂)/(P₁V₁)=233×(4×2.5)/(2×10)=116.5K → 116.5−273=−156.5°C."
+}
+];
+
+/* ═══════════════════════════════════════════════
+   STATE & RENDER
+═══════════════════════════════════════════════ */
+let cur=0, score=0, ans=new Array(Q.length).fill(undefined);
+
+function render(){
+  const app=document.getElementById('app');
+  document.getElementById('prog-label').textContent=`${cur} / ${Q.length}`;
+  document.getElementById('prog-fill').style.width=(cur/Q.length*100)+'%';
+
+  if(cur>=Q.length){ showScore(app); return; }
+
+  const q=Q[cur];
+  const done=ans[cur]!==undefined;
+  const ua=ans[cur];
+
+  const graphHTML=q.graph
+    ?`<div class="graph-wrap">${q.graph}</div>`
+    :'';
+
+  const optsHTML=q.opts.map((o,i)=>{
+    const lbls=['أ','ب','ج','د'];
+    let cls='opt';
+    if(done){
+      if(i===q.ans) cls+=' correct';
+      else if(i===ua) cls+=' wrong';
+    }
+    return `<button class="${cls}" onclick="pick(${i})" ${done?'disabled':''}>`+
+      `<span class="opt-lbl">${lbls[i]}</span>`+
+      `<span>${o}</span>`+
+      `</button>`;
+  }).join('');
+
+  const fbHTML=done
+    ?`<div class="feedback ${ua===q.ans?'ok':'err'}">`+
+     `<div class="fb-title">${ua===q.ans?'✓ إجابة صحيحة':'✗ إجابة خاطئة'}</div>`+
+     `<div>${ua===q.ans?q.fb_ok:q.fb_err}</div>`+
+     `</div>`
+    :'';
+
+  app.innerHTML=`
+    <div class="q-card">
+      <div class="q-header">
+        <span class="badge badge-num">سؤال ${cur+1} / 10</span>
+        <span class="badge badge-level">${q.level}</span>
+        <span class="badge badge-topic">${q.topic}</span>
+      </div>
+      <div class="q-body">
+        <div class="context-block">${q.context}</div>
+        ${graphHTML}
+        <div class="q-text">${q.q}</div>
+        <div class="options">${optsHTML}</div>
+        ${fbHTML}
+        ${done?`<button class="btn-next" style="display:block" onclick="next()">
+          ${cur<Q.length-1?'السؤال التالي ←':'عرض النتيجة ←'}
+        </button>`:''}
+      </div>
+    </div>`;
+}
+
+function pick(i){
+  if(ans[cur]!==undefined) return;
+  ans[cur]=i;
+  if(i===Q[cur].ans) score++;
+  render();
+}
+
+function next(){ cur++; render(); }
+
+function showScore(app){
+  document.getElementById('prog-fill').style.width='100%';
+  document.getElementById('prog-label').textContent='10 / 10';
+
+  const pct=Math.round(score/Q.length*100);
+  const msgs=[
+    [90,'أداء استثنائي — مستوى أولمبياد دولي!'],
+    [70,'أداء متميز — مرشح قوي للأولمبياد'],
+    [50,'أداء جيد — راجع المفاهيم الأساسية'],
+    [0,'تحتاج مراجعة شاملة لقوانين الغازات']
+  ];
+  const msg=msgs.find(([t])=>pct>=t)[1];
+
+  const reviewHTML=Q.map((q,i)=>{
+    const ok=ans[i]===q.ans;
+    return `<div class="review-item">`+
+      `<span class="ri-dot ${ok?'ok':'err'}"></span>`+
+      `<span class="ri-q">س${i+1}: ${q.topic}</span>`+
+      `<span class="ri-badge ${ok?'ok':'err'}">${ok?'صواب':'خطأ'}</span>`+
+      `</div>`;
+  }).join('');
+
+  app.innerHTML=`
+    <div class="score-wrap">
+      <div class="score-ring" style="--pct:${pct*3.6}deg">
+        <span class="score-num">${score}/10</span>
+      </div>
+      <div class="score-msg">${msg}</div>
+      <div class="score-sub">النسبة: ${pct}%</div>
+      <div class="stats-grid">
+        <div class="stat-cell"><div class="stat-n g">${score}</div><div class="stat-lbl">صحيح</div></div>
+        <div class="stat-cell"><div class="stat-n r">${Q.length-score}</div><div class="stat-lbl">خطأ</div></div>
+        <div class="stat-cell"><div class="stat-n b">${pct}%</div><div class="stat-lbl">النسبة</div></div>
+      </div>
+      <div class="review-list">${reviewHTML}</div>
+      <button class="btn-restart" onclick="restart()">إعادة الاختبار</button>
+    </div>`;
+}
+
+function restart(){
+  cur=0; score=0; ans=new Array(Q.length).fill(undefined);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
